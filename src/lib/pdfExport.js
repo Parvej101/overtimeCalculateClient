@@ -24,75 +24,86 @@ export function exportReportToPdf({
 
   const pageWidth = doc.internal.pageSize.getWidth();
 
-  // Try adding logo if available
+  // 1. Header: Add logo with good spacing
+  const logoX = 14;
+  const logoY = 9;
+  const logoWidth = 18;
+  const logoHeight = 15;
+
   try {
     const img = document.querySelector('.printable-area img');
     if (img && img.complete) {
-      doc.addImage(img, 'JPEG', 14, 10, 14, 14);
+      doc.addImage(img, 'PNG', logoX, logoY, logoWidth, logoHeight);
     }
   } catch (e) {
     // If image fails, fallback gracefully
   }
 
-  const textStartX = 32;
+  // Increased gap between logo and text
+  const textStartX = logoX + logoWidth + 6; // 38mm
 
-  // 1. Header: Company Name & Title
+  // 1. Header: Company Name & Overtime Report title without any overlapping
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(16);
+  doc.setFontSize(15);
   doc.setTextColor(15, 23, 42); // slate-900
-  doc.text((companyName || 'FPC').toUpperCase(), textStartX, 15);
+  const compText = (companyName || 'FPC').toUpperCase();
+  doc.text(compText, textStartX, 15);
+
+  const compWidth = doc.getTextWidth(compText);
 
   doc.setFontSize(9);
+  doc.setFont('helvetica', 'bold');
   doc.setTextColor(100, 116, 139); // slate-500
-  doc.text('OVERTIME REPORT', textStartX + doc.getTextWidth((companyName || 'FPC').toUpperCase()) + 3, 15);
+  doc.text('OVERTIME REPORT', textStartX + compWidth + 3, 15);
 
+  // Subtitle (Monthly Attendance Sheet) smaller font & clean spacing
   doc.setFont('helvetica', 'normal');
-  doc.setFontSize(8.5);
-  doc.setTextColor(71, 85, 105);
-  doc.text(`Monthly Attendance & Overtime Calculation Sheet — ${formattedMonthLabel || month}`, textStartX, 21);
+  doc.setFontSize(7.5);
+  doc.setTextColor(100, 116, 139);
+  doc.text(`Monthly Attendance & Overtime Calculation Sheet — ${formattedMonthLabel || month}`, textStartX, 20);
 
   // Top right metadata
-  doc.setFontSize(8);
-  doc.text(`Standard Duty: ${dutyHours}h ${dutyMinutes}m`, pageWidth - 14, 14, { align: 'right' });
-  doc.text(`OT Rate: BDT ${Number(hourlyRate) || 0} / hr`, pageWidth - 14, 19, { align: 'right' });
-  doc.text(`Print Date: ${new Date().toLocaleDateString('en-GB')}`, pageWidth - 14, 24, { align: 'right' });
+  doc.setFontSize(7.5);
+  doc.text(`Standard Duty: ${dutyHours}h ${dutyMinutes}m`, pageWidth - 14, 13.5, { align: 'right' });
+  doc.text(`OT Rate: BDT ${Number(hourlyRate) || 0} / hr`, pageWidth - 14, 18, { align: 'right' });
+  doc.text(`Print Date: ${new Date().toLocaleDateString('en-GB')}`, pageWidth - 14, 22.5, { align: 'right' });
 
   // Divider line
   doc.setDrawColor(226, 232, 240); // slate-200
   doc.setLineWidth(0.3);
-  doc.line(14, 27, pageWidth - 14, 27);
+  doc.line(14, 26, pageWidth - 14, 26);
 
   // 2. Employee Metadata Row
-  doc.setFontSize(8.5);
+  doc.setFontSize(8);
   doc.setTextColor(100, 116, 139);
-  doc.text('Employee Name:', 14, 32);
+  doc.text('Employee Name:', 14, 31);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(15, 23, 42);
-  doc.text(employeeName || '—', 39, 32);
+  doc.text(employeeName || '—', 38, 31);
 
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(100, 116, 139);
-  doc.text('ID / No:', 80, 32);
+  doc.text('ID / No:', 80, 31);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(15, 23, 42);
-  doc.text(employeeId || '—', 93, 32);
+  doc.text(employeeId || '—', 92, 31);
 
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(100, 116, 139);
-  doc.text('Designation:', 120, 32);
+  doc.text('Designation:', 120, 31);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(15, 23, 42);
-  doc.text(designation || '—', 140, 32);
+  doc.text(designation || '—', 139, 31);
 
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(100, 116, 139);
-  doc.text('Card No:', 168, 32);
+  doc.text('Card No:', 168, 31);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(15, 23, 42);
-  doc.text(cardNo || '—', 182, 32);
+  doc.text(cardNo || '—', 182, 31);
 
   // 3. KPI Summary Strip (Clean subtle gray boxes)
-  const boxY = 36;
+  const boxY = 35;
   const boxHeight = 11;
   const totalBoxWidth = pageWidth - 28;
   const colWidth = totalBoxWidth / 5;
@@ -150,7 +161,7 @@ export function exportReportToPdf({
   });
 
   autoTable(doc, {
-    startY: 50,
+    startY: 49,
     margin: { left: 14, right: 14, bottom: 26 },
     head: [['Date', 'Day', 'In Time (12h)', 'Out Time (12h)', 'Duty Time', 'Overtime / Short']],
     body: tableRows,

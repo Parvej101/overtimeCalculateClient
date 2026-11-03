@@ -26,29 +26,29 @@ export default function PrintableA4Report({
       {/* Official Report Header */}
       <div className="border-b border-slate-300 pb-3 mb-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div className="flex items-center gap-3">
-            {/* Company Logo */}
-            <div className="w-12 h-12 relative flex-shrink-0 rounded-lg overflow-hidden border border-slate-200">
+          <div className="flex items-center gap-4">
+            {/* Company Logo - increased width and spacing */}
+            <div className="w-16 h-14 relative flex-shrink-0 rounded-lg overflow-hidden border border-slate-200 bg-white">
               <Image
                 src="/logo/logo.png"
                 alt="Company Logo"
                 fill
-                className="object-contain"
+                className="object-contain p-0.5"
                 priority
               />
             </div>
             <div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-baseline gap-2.5">
                 <h2 className="text-xl sm:text-2xl font-black tracking-tight text-slate-900 uppercase">
                   {companyName || 'FPC'}
                 </h2>
-                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
                   OVERTIME REPORT
                 </span>
               </div>
-              <p className="text-xs sm:text-sm text-slate-600 mt-0.5 font-medium">
+              <p className="text-[11px] sm:text-xs text-slate-500 mt-0.5 font-normal">
                 Monthly Attendance & Overtime Calculation Sheet —{' '}
-                <span className="text-slate-900 font-bold">{formattedMonthLabel}</span>
+                <span className="text-slate-800 font-semibold">{formattedMonthLabel}</span>
               </p>
             </div>
           </div>
