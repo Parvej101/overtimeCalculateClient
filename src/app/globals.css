@@ -4,116 +4,80 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --background: #f8fafc;
+  --foreground: #0f172a;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
 }
 
+/* ==================== SINGLE-PAGE A4 PRINT OPTIMIZATION ==================== */
 @media print {
-  /* অপ্রয়োজনীয় অংশ লুকানো */
-  .no-print, nav {
+  .no-print,
+  nav {
     display: none !important;
   }
 
-  /* পৃষ্ঠার আকার এবং মার্জিন নির্ধারণ */
   @page {
-    size: A4;
-    margin: 10mm; 
+    size: A4 portrait;
+    margin: 6mm 8mm;
   }
 
-  /* body এবং html রিসেট */
-  body, html {
+  html,
+  body {
     margin: 0 !important;
     padding: 0 !important;
-    background-color: white !important;
-    font-size: 10pt; /* বেস ফন্ট সাইজ ৯ পয়েন্ট করা হলো */
-    line-height: 1.4; /* লাইন হাইট কমানো হলো */
+    background: #ffffff !important;
+    color: #000000 !important;
+    font-size: 8.5pt !important;
+    line-height: 1.15 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 
-  /* প্রিন্টেবল অংশটিকে প্রস্তুত করা */
-  .printable-area, .printable-area * {
-    visibility: visible;
+  main {
+    padding: 0 !important;
+    margin: 0 !important;
   }
+
   .printable-area {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-  }
-
-  /* টেক্সট এবং হেডিংয়ের স্টাইল */
-  .printable-area h2, .printable-area h3 {
-    margin-top: 10px;
-    margin-bottom: 8px;
-    font-size: 12pt !important;
-  }
-  .printable-area p {
-    margin: 2px 0;
-  }
-
-  /* সামারি কার্ডগুলোর স্টাইল আরও কম্প্যাক্ট করা */
-  .printable-area .grid-cols-3 > div {
-    padding: 8px !important; /* কার্ডের প্যাডিং কমানো হলো */
-  }
-  .printable-area .grid-cols-3 h3 {
-    font-size: 10pt !important;
-    margin-bottom: 4px;
-  }
-  .printable-area .grid-cols-3 p {
-    font-size: 14pt !important;
-  }
-
-  /* টেবিলের স্টাইল আরও কম্প্যাক্ট করা */
-  .printable-area table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  .printable-area th, .printable-area td {
-    border: 1px solid #ddd !important;
-    padding: 3px 5px !important; /* সেলের প্যাডিং কমানো হলো */
-    text-align: left;
-  }
-  .printable-area .text-center {
-    text-align: center !important;
-  }
-  
-  /* অপ্রয়োজনীয় শ্যাডো, বর্ডার ইত্যাদি বাদ দেওয়া */
-  .printable-area .shadow-md, .printable-area .rounded-lg {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
     box-shadow: none !important;
-    border: 1px solid #eee !important;
+    border-radius: 0 !important;
   }
-}
 
-/* --- react-time-picker-এর জন্য কাস্টম স্টাইল --- */
-.react-time-picker-custom .react-time-picker__wrapper {
-  border: 1px solid #d1d5db; /* gray-300 */
-  border-radius: 0.5rem; /* rounded-lg */
-  padding: 0.5rem; /* p-2 */
-  width: 100%;
-}
+  /* Force summary strip into 5 compact columns in print */
+  .print-summary-grid {
+    display: grid !important;
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    gap: 4px !important;
+    margin-bottom: 6px !important;
+  }
 
-.react-time-picker-custom .react-time-picker__inputGroup__input {
-  outline: none;
-}
+  .print-summary-grid > div {
+    padding: 4px 6px !important;
+    border-radius: 4px !important;
+  }
 
-.react-time-picker-custom .react-time-picker__inputGroup__input:focus {
-  outline: none;
-}
+  .printable-area table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    font-size: 8pt !important;
+  }
 
-.react-time-picker__clock {
-    z-index: 100 !important; /* নিশ্চিত করে যে ক্লকটি অন্য সবকিছুর উপরে থাকবে */
+  .printable-area th,
+  .printable-area td {
+    border: 1px solid #94a3b8 !important;
+    padding: 1.8px 4px !important;
+  }
+
+  .printable-area tr {
+    page-break-inside: avoid !important;
+  }
 }

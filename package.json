@@ -12,6 +12,9 @@
     "@auth/mongodb-adapter": "^3.10.0",
     "bcryptjs": "^3.0.2",
     "dotenv": "^16.5.0",
+    "html2pdf.js": "^0.14.0",
+    "jspdf": "^4.2.1",
+    "jspdf-autotable": "^5.0.9",
     "luxon": "^3.7.1",
     "mongoose": "^8.16.0",
     "next": "15.3.4",
@@ -19,7 +22,8 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-time-picker": "^7.0.0",
-    "sweetalert2": "^11.22.0"
+    "sweetalert2": "^11.22.0",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

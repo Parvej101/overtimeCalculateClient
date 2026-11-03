@@ -1,79 +1,86 @@
-"use client"; // যেহেতু আমরা useState এবং onClick ব্যবহার করব, তাই এটি ক্লায়েন্ট কম্পোনেন্ট
+"use client";
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 
 export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false); // মেনু খোলা বা বন্ধ অবস্থা ট্র্যাক করার জন্য
+  const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
 
   const navLinks = [
-    { href: "/employeeList", label: "Employee List" },
-    { href: "/attendance", label: "Attendance" },
-    { href: "/reports", label: "Reports" },
+    { href: '/', label: 'XLS Overtime Report & Print' },
+    { href: '/employeeList', label: 'Saved Employees' },
   ];
 
   return (
-    <nav className="bg-white shadow-md sticky top-0 z-50">
+    <nav className="no-print bg-white border-b border-slate-200 sticky top-0 z-50 shadow-xs">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* === লোগো / ব্র্যান্ডের নাম === */}
-          <div className="flex-shrink-0">
-            <div className='flex items-center '>
-              <div className='w-15 h-15'>
-                <img src="/icon.png" alt="" />
+          {/* Brand Logo & Name */}
+          <Link href="/" className="flex items-center gap-3 group">
+            <div className="w-10 h-10 relative flex-shrink-0 rounded-lg overflow-hidden border border-slate-200 bg-white">
+              <Image
+                src="/logo/logo.png"
+                alt="FPC Logo"
+                fill
+                className="object-contain"
+                priority
+              />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-xl font-bold text-slate-900 tracking-tight">
+                  FPC Overtime
+                </span>
+                <span className="hidden sm:inline-block text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 border border-slate-200">
+                  Local Storage • A4 Print
+                </span>
               </div>
-              <div>
+              <p className="text-xs text-slate-500 hidden sm:block">
+                Biometric Attendance & Overtime Calculator (BDT ৳)
+              </p>
+            </div>
+          </Link>
 
-                <Link href="/" className="text-2xl font-bold text-[#11b1e6] hover:text-[#5ce1e6] transition-colors">
-                  OvertimeCal
+          {/* Desktop Navigation - Professional Monochrome / Slate */}
+          <div className="hidden md:flex items-center space-x-1.5">
+            {navLinks.map((link) => {
+              const isActive =
+                link.href === '/'
+                  ? pathname === '/'
+                  : pathname.startsWith(link.href);
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={`px-3.5 py-2 rounded-lg text-xs font-semibold transition-all ${
+                    isActive
+                      ? 'bg-slate-900 text-white shadow-xs'
+                      : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                  }`}
+                >
+                  {link.label}
                 </Link>
-
-              </div>
-
-            </div>
-
+              );
+            })}
           </div>
 
-          {/* === ডেস্কটপ মেনু (বড় স্ক্রিনের জন্য) === */}
-          <div className="hidden md:block">
-            <div className="ml-10 flex items-baseline space-x-4">
-              {navLinks.map((link) => {
-                const isActive = pathname.startsWith(link.href);
-                return (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${isActive
-                      ? 'bg-[#11b1e6] text-white'
-                      : 'text-gray-600 hover:bg-gray-100'
-                      }`}
-                  >
-                    {link.label}
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* === মোবাইল মেনু বাটন (হ্যামবার্গার) === */}
-          <div className="-mr-2 flex md:hidden">
+          {/* Mobile Menu Button */}
+          <div className="flex md:hidden">
             <button
               onClick={() => setIsOpen(!isOpen)}
               type="button"
-              className="bg-gray-100 inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-black hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              aria-controls="mobile-menu"
-              aria-expanded="false"
+              className="inline-flex items-center justify-center p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 focus:outline-hidden"
+              aria-label="Toggle Menu"
             >
-              <span className="sr-only">Open main menu</span>
-              {/* মেনু বন্ধ থাকলে হ্যামবার্গার আইকন, খোলা থাকলে ক্রস আইকন */}
               {!isOpen ? (
-                <svg className="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
               ) : (
-                <svg className="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
               )}
@@ -82,28 +89,29 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* === মোবাইল মেনু (শর্তসাপেক্ষে দেখানো হবে) === */}
-      {/* isOpen true হলে এই div-টি দেখানো হবে */}
+      {/* Mobile Menu Drawer */}
       {isOpen && (
-        <div className="md:hidden" id="mobile-menu">
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            {navLinks.map((link) => {
-              const isActive = pathname.startsWith(link.href);
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setIsOpen(false)} // লিঙ্কে ক্লিক করলে মেনু বন্ধ হয়ে যাবে
-                  className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${isActive
-                    ? 'bg-[#11b1e6] text-white'
-                    : 'text-gray-600 hover:bg-gray-100'
-                    }`}
-                >
-                  {link.label}
-                </Link>
-              );
-            })}
-          </div>
+        <div className="md:hidden border-t border-slate-200 bg-white px-4 pt-2 pb-4 space-y-1 shadow-lg">
+          {navLinks.map((link) => {
+            const isActive =
+              link.href === '/'
+                ? pathname === '/'
+                : pathname.startsWith(link.href);
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={() => setIsOpen(false)}
+                className={`block px-3 py-2 rounded-lg text-sm font-semibold transition-colors ${
+                  isActive
+                    ? 'bg-slate-900 text-white'
+                    : 'text-slate-600 hover:bg-slate-100'
+                }`}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
         </div>
       )}
     </nav>
